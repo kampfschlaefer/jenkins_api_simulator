@@ -40,6 +40,7 @@ setup(
     tests_require=[
         'pytest==2.7.0',
         'pytest-localserver==0.3.4',
+        'pytest-capturelog==0.7',
         'jenkinsapi==0.2.26'
     ],
     cmdclass={
