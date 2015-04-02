@@ -6,16 +6,18 @@ from pytest_localserver.http import WSGIServer
 
 from jenkins_api_simulator import passthrough
 from jenkins_api_simulator import statefull
-passthrough.jenkins_url = 'http://localhost:8080'
 
 
 def pytest_generate_tests(metafunc):
     if 'app' in metafunc.fixturenames:
         apps = [statefull.app]
         ids = ['statefull']
+
         if metafunc.config.option.jenkins:
             apps.append(passthrough.app)
             ids.append('passthrough')
+            passthrough.jenkins_url = metafunc.config.option.jenkins
+
         metafunc.parametrize('app', apps, ids=ids)
 
 
