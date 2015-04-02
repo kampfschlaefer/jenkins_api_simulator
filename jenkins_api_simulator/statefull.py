@@ -90,6 +90,15 @@ def get_job_config(name):
     return (jobs[name]['config'], 200, {'Content-Type': 'application/xml'})
 
 
+@app.route('/job/<name>/config.xml', methods=['POST'])
+def post_job_config(name):
+    if name not in jobs:
+        raise Exception('Job %s not found' % name)
+
+    jobs[name]['config'] = request.data
+    return "Updated %s" % name
+
+
 @app.route('/queue/item/<number>', methods=['GET'])
 def get_queue_item(number):
     return "Queue item %s" % number

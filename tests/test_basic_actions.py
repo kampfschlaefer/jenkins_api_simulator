@@ -1,4 +1,5 @@
 
+from lxml import etree
 import logging
 from jenkinsapi import jenkins
 import pytest
@@ -84,3 +85,14 @@ def test_copy_job(single_job_jenkins):
     assert 'copy_of_test_job_01' in jobs
 
     single_job_jenkins.delete_job('copy_of_test_job_01')
+
+def test_modify_job(single_job_jenkins):
+    job = single_job_jenkins.get_job('test_job_01')
+    config = job.get_config()
+
+    root = etree.XML(config)
+    root.find('description').text = 'Some description here'
+    job.update_config(etree.tostring(root, method='xml'))
+
+    config = job.get_config()
+    assert 'Some description here' in config

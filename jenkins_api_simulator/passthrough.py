@@ -76,6 +76,14 @@ def get_job_config(name):
     return prepare_response(r)
 
 
+@app.route('/job/<name>/config.xml', methods=['POST'])
+def post_job_config(name):
+    logger.info('Setting new config.xml for %s', name)
+    r = requests.post('%s%s' % (jenkins_url, request.path), data=request.data)
+    logger.info('Reponse is %i: %s', r.status_code, r.text)
+    return prepare_response(r)
+
+
 @app.route('/createItem', methods=['POST'])
 def post_create_job():
     logger.info('Posting new job \'%s\'', request.args['name'])

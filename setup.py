@@ -42,7 +42,8 @@ setup(
         'pytest>=2.6.0',
         'pytest-localserver>=0.3.4',
         'pytest-capturelog>=0.7',
-        'jenkinsapi>=0.2.26'
+        'jenkinsapi>=0.2.26',
+        'lxml',
     ],
     cmdclass={
         'test': PyTest,
