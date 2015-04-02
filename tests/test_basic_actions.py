@@ -11,11 +11,12 @@ passthrough.jenkins_url = 'http://localhost:8080'
 
 def pytest_generate_tests(metafunc):
     if 'app' in metafunc.fixturenames:
-        metafunc.parametrize(
-            'app',
-            (passthrough.app,statefull.app),
-            ids=['passthrough', 'statefull']
-        )
+        apps = [statefull.app]
+        ids = ['statefull']
+        if metafunc.config.option.jenkins:
+            apps.append(passthrough.app)
+            ids.append('passthrough')
+        metafunc.parametrize('app', apps, ids=ids)
 
 
 @pytest.yield_fixture
