@@ -82,6 +82,14 @@ def post_job_build(name):
     return ('New build with id %i' % id, 201, {'location': url_for('get_queue_item', number=id, _external=True)})
 
 
+@app.route('/job/<name>/config.xml', methods=['GET'])
+def get_job_config(name):
+    if name not in jobs:
+        raise Exception('Job %s not found' % name)
+
+    return (jobs[name]['config'], 200, {'Content-Type': 'application/xml'})
+
+
 @app.route('/queue/item/<number>', methods=['GET'])
 def get_queue_item(number):
     return "Queue item %s" % number

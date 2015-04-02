@@ -69,3 +69,18 @@ def test_run_job(single_job_jenkins):
 
     qi = job.invoke()
     assert qi.queue_id
+
+
+def test_copy_job(single_job_jenkins):
+    origjob = single_job_jenkins.get_job('test_job_01')
+    origconfig = origjob.get_config()
+
+    print origconfig
+
+    single_job_jenkins.create_job('copy_of_test_job_01', origconfig)
+
+    jobs = single_job_jenkins.keys()
+    assert 'test_job_01' in jobs
+    assert 'copy_of_test_job_01' in jobs
+
+    single_job_jenkins.delete_job('copy_of_test_job_01')
