@@ -38,10 +38,10 @@ setup(
         'gevent==1.0.1',
     ],
     tests_require=[
-        'pytest==2.7.0',
-        'pytest-localserver==0.3.4',
-        'pytest-capturelog==0.7',
-        'jenkinsapi==0.2.26'
+        'pytest>=2.6.0',
+        'pytest-localserver>=0.3.4',
+        'pytest-capturelog>=0.7',
+        'jenkinsapi>=0.2.26'
     ],
     cmdclass={
         'test': PyTest,
