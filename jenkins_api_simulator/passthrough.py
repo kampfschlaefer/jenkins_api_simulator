@@ -18,6 +18,13 @@ def prepare_response(response):
             _headers[h] = response.headers[h]
         except KeyError:
             pass
+    try:
+        _headers['location'] = response.headers['location'].replace(
+            jenkins_url,
+            request.url_root.strip('/')
+        )
+    except KeyError:
+        pass
     _content = response.text.replace(jenkins_url, request.url_root.strip('/'))
     return make_response((_content, response.status_code, _headers))
 
@@ -53,10 +60,31 @@ def post_delete_job(name):
     return prepare_response(r)
 
 
+@app.route('/job/<name>/build', methods=['POST'])
+def post_build_job(name):
+    logger.info('Building job %s', name)
+    r = requests.post('%s%s' % (jenkins_url, request.path))
+    logger.info('Response is %i: %s', r.status_code, r.text)
+    return prepare_response(r)
+
+
 @app.route('/createItem', methods=['POST'])
 def post_create_job():
     logger.info('Posting new job \'%s\'', request.args['name'])
     logger.info(' Request data is %s', request.data)
-    r = requests.post('%s%s' % (jenkins_url, request.path), params=request.args, data=request.data, headers={'Content-Type': 'application/xml'})
+    r = requests.post(
+        '%s%s' % (jenkins_url, request.path),
+        params=request.args,
+        data=request.data,
+        headers={'Content-Type': 'application/xml'}
+    )
     logger.info('Answer is %s', r.text)
+    return prepare_response(r)
+
+
+@app.route('/queue/item/<number>/api/python', methods=['GET'])
+def get_queue_item(number):
+    logger.info('Getting queue item %s', number)
+    r = requests.get('%s%s' % (jenkins_url, request.path))
+    logger.info(' Answer is %i: %s', r.status_code, r.text)
     return prepare_response(r)

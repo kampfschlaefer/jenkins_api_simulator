@@ -45,10 +45,24 @@ def test_create_test_job(myjenkins):
     myjenkins.delete_job('test_job_01')
 
 
-def test_get_first_job(myjenkins):
-    jobname = myjenkins.keys()[0]
+@pytest.yield_fixture
+def single_job_jenkins(myjenkins):
+    myjenkins.create_job('test_job_01', open('tests/basic_job.xml', 'r').read())
+    yield myjenkins
+    myjenkins.delete_job('test_job_01')
+
+
+def test_get_first_job(single_job_jenkins):
+    jobname = single_job_jenkins.keys()[0]
     assert jobname
 
-    first_job = myjenkins[jobname]
+    first_job = single_job_jenkins[jobname]
     assert first_job is not None
     assert first_job.name == jobname
+
+
+def test_run_job(single_job_jenkins):
+    job = single_job_jenkins.get_job('test_job_01')
+
+    qi = job.invoke()
+    assert qi.queue_id
