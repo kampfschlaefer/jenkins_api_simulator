@@ -31,6 +31,7 @@ setup(
     version='0.1',
     author='Arnold Krille',
     author_email='arnold@arnoldarts.de',
+    license='GPLv3',
     packages=find_packages(),
     install_requires=[
         'requests==2.6.0',
