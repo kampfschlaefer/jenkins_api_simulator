@@ -43,7 +43,13 @@ setup(
         'pytest-localserver>=0.3.4',
         'pytest-capturelog>=0.7',
         'jenkinsapi>=0.2.26',
-        'lxml',
+        'lxml>=3.4.0',
+        # for adhoc ssl on the wsgi-server and no insecure warnings on the request
+        'pyopenssl>=0.15.0',
+        'ndg-httpsclient>=0.4.0',
+        'pyasn1>=0.1.7',
+        'urllib3>=1.10.0',
+
     ],
     cmdclass={
         'test': PyTest,

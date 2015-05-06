@@ -1,12 +1,21 @@
 
 from lxml import etree
 import logging
+
+# Prevents the insecure platform warning by providing a secure platform
+import urllib3.contrib.pyopenssl
+
 from jenkinsapi import jenkins
+from jenkinsapi.utils.requester import Requester
+
 import pytest
 from pytest_localserver.http import WSGIServer
 
 from jenkins_api_simulator import passthrough
 from jenkins_api_simulator import statefull
+
+urllib3.contrib.pyopenssl.inject_into_urllib3()
+logging.captureWarnings(True)
 
 
 def pytest_generate_tests(metafunc):
@@ -24,7 +33,7 @@ def pytest_generate_tests(metafunc):
 
 @pytest.yield_fixture
 def jenkins_server(app):
-    _server = WSGIServer(application=app)
+    _server = WSGIServer(application=app, ssl_context='adhoc')
     _server.start()
     yield _server
     _server.stop()
@@ -32,7 +41,8 @@ def jenkins_server(app):
 
 @pytest.fixture
 def myjenkins(jenkins_server):
-    return jenkins.Jenkins(jenkins_server.url)
+    requester = Requester(None, None, baseurl=jenkins_server.url, ssl_verify=False)
+    return jenkins.Jenkins(jenkins_server.url, requester=requester)
 
 
 def test_get_jobs(myjenkins):
@@ -85,6 +95,10 @@ def test_copy_job(single_job_jenkins):
     assert 'copy_of_test_job_01' in jobs
 
     single_job_jenkins.delete_job('copy_of_test_job_01')
+    jobs = single_job_jenkins.keys()
+    assert 'test_job_01' in jobs
+    assert 'copy_of_test_job_01' not in jobs
+
 
 def test_modify_job(single_job_jenkins):
     job = single_job_jenkins.get_job('test_job_01')
