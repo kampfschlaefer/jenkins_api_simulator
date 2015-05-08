@@ -34,9 +34,9 @@ setup(
     license='GPLv3',
     packages=find_packages(),
     install_requires=[
-        'requests==2.6.0',
-        'flask==0.10.1',
-        'gevent==1.0.1',
+	'requests>=2.6.0',
+        'flask>=0.10.1',
+        'gevent>=1.0.1',
     ],
     tests_require=[
         'pytest>=2.6.0',
