@@ -49,7 +49,6 @@ setup(
         'ndg-httpsclient>=0.4.0',
         'pyasn1>=0.1.7',
         'urllib3>=1.10.0',
-
     ],
     cmdclass={
         'test': PyTest,
