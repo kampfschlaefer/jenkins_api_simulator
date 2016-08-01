@@ -42,7 +42,7 @@ setup(
         'pytest>=2.6.0',
         'pytest-localserver>=0.3.4',
         'pytest-capturelog>=0.7',
-        'jenkinsapi>=0.2.26',
+        'jenkinsapi==0.2.28',
         'lxml>=3.4.0',
         # for adhoc ssl on the wsgi-server and no insecure warnings on the request
         'pyopenssl>=0.15.0',
